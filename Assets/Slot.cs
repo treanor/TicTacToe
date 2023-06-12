@@ -15,7 +15,7 @@ public class Slot : MonoBehaviour
     private Material player2Material;
 
     private new Renderer renderer;
-
+    private int Player = -1;
 
 
     void Start()
@@ -29,26 +29,28 @@ public class Slot : MonoBehaviour
         
     }
 
-    private void OnMouseDown(object sender)
+    private void OnMouseDown()
     {
-        Debug.Log("Clicked");
-/*        Cube cube = sender as Cube;
-        if (cube != null)
+        if (Player == -1)
         {
-            cube.material = (currentPlayer == 1) ? player1Material : player2Material;
-            currentPlayer = (currentPlayer == 1) ? 2 : 1;
-        }*/
+            Debug.Log("Clickable");
+        }
     }
 
     private void OnMouseEnter()
     {
-        // Change the material to the highlight material when the mouse enters the object
-        renderer.material = mouseOverMaterial;
+        if (renderer.material != emptyMaterial)
+        {
+            renderer.material = mouseOverMaterial;
+        }
     }
 
     private void OnMouseExit()
     {
-        // Change the material back to the normal material when the mouse exits the object
-        renderer.material = emptyMaterial;
+        if (renderer.material != mouseOverMaterial)
+        {
+            renderer.material = emptyMaterial;
+        }
+        
     }
 }
