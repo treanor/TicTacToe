@@ -13,7 +13,9 @@ public class Slot : MonoBehaviour
     private Material player1Material;
     [SerializeField]
     private Material player2Material;
-
+    
+    private GameManager gameManager;
+    private Vector2 position;
     private new Renderer renderer;
     private int Player = -1;
 
@@ -24,9 +26,10 @@ public class Slot : MonoBehaviour
         renderer.material = emptyMaterial;
     }
 
-    void Update()
+    public void InitializeCell(int x, int y, GameManager manager)
     {
-        
+        gameManager = manager;
+        position = new Vector2(x, y);
     }
 
     private void OnMouseDown()
