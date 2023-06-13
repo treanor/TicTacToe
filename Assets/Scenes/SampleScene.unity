@@ -496,6 +496,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotPrefab: {fileID: 965741328487317937, guid: 3ee00521d727a8443ab4d15daae83dac,
     type: 3}
+  gridSize: 0
+  grid: []
 --- !u!1001 &649626628
 PrefabInstance:
   m_ObjectHideFlags: 0
