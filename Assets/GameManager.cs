@@ -75,6 +75,9 @@ public class GameManager : MonoBehaviour
             for (int z = 0; z < gridSize; z++)
             {
                 board[x, z] = 0;
+
+                Cell cellScript = grid[x, z].GetComponent<Cell>();
+                cellScript.ResetCell();
             }
         }
     }
@@ -94,11 +97,13 @@ public class GameManager : MonoBehaviour
         {
             Debug.Log("Player " + currentPlayer + " wins!");
             // TODO Implement the win condition logic here
+            ResetGame();
         }
         else if (CheckTieCondition())
         {
             Debug.Log("It's a tie!");
             // TODO Implement the tie condition logic here
+            ResetGame();
         }
         else
         {
@@ -106,20 +111,97 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private bool CheckWinCondition(int player)
+    public bool CheckWinCondition(int player)
     {
-        // TODO
-        // Implement the win condition logic here
-        // Check for horizontal, vertical, and diagonal lines, use sum of vector = grid - 1 to get forward diag, and vector parts == to eachother to get the back diag
-        // Return true if the player wins, otherwise return false
+        // Check rows
+        for (int i = 0; i < gridSize; i++)
+        {
+            bool hasWon = true;
+            for (int j = 0; j < gridSize; j++)
+            {
+                if (board[i, j] != player)
+                {
+                    hasWon = false;
+                    break;
+                }
+            }
+
+            if (hasWon)
+            {
+                return true;
+            }
+        }
+
+        // Check columns
+        for (int j = 0; j < gridSize; j++)
+        {
+            bool hasWon = true;
+            for (int i = 0; i < gridSize; i++)
+            {
+                if (board[i, j] != player)
+                {
+                    hasWon = false;
+                    break;
+                }
+            }
+
+            if (hasWon)
+            {
+                return true;
+            }
+        }
+
+        // Check diagonals
+        bool diagonal1 = true;
+        bool diagonal2 = true;
+
+        for (int i = 0; i < gridSize; i++)
+        {
+            if (board[i, i] != player)
+            {
+                diagonal1 = false;
+            }
+
+            if (board[i, gridSize - 1 - i] != player)
+            {
+                diagonal2 = false;
+            }
+        }
+
+        if (diagonal1 || diagonal2)
+        {
+            return true;
+        }
+
+        // No winning condition found
         return false;
     }
 
-    private bool CheckTieCondition()
+
+    public bool CheckTieCondition()
     {
-        // TODO
-        // Implement the tie condition logic here
-        // Return true if it's a tie, otherwise return false
-        return false;
+        for (int x = 0; x < gridSize; x++)
+        {
+            for (int y = 0; y < gridSize; y++)
+            {
+                if (board[x, y] == 0)
+                {
+                    // If any empty cell is found, the game is not a tie
+                    return false;
+                }
+            }
+        }
+
+        // If all cells are filled and no win condition is met, it's a tie
+        return true;
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            ResetGame();
+        }
+        
     }
 }

@@ -34,6 +34,12 @@ public class Cell : MonoBehaviour
         gameManager = manager;
     }
 
+    public void ResetCell()
+    {
+        renderer = GetComponent<Renderer>();
+        renderer.material = emptyMaterial;
+    }
+
     private void OnMouseDown()
     {
         if (Player == -1)
@@ -44,7 +50,7 @@ public class Cell : MonoBehaviour
 
     private void OnMouseEnter()
     {
-        if (renderer.material == emptyMaterial)
+        if (renderer.material.name == "Grey (Instance)")
         {
             renderer.material = mouseOverMaterial;
         }
@@ -52,7 +58,7 @@ public class Cell : MonoBehaviour
 
     private void OnMouseExit()
     {
-        if (renderer.material == mouseOverMaterial)
+        if (renderer.material.name == "Green (Instance)")
         {
             renderer.material = emptyMaterial;
         }
