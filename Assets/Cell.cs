@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Slot : MonoBehaviour
+public class Cell : MonoBehaviour
 {
 
     [SerializeField]
@@ -13,9 +13,10 @@ public class Slot : MonoBehaviour
     private Material player1Material;
     [SerializeField]
     private Material player2Material;
-    
+
+    private int x;
+    private int z;
     private GameManager gameManager;
-    private Vector2 position;
     private new Renderer renderer;
     private int Player = -1;
 
@@ -26,23 +27,24 @@ public class Slot : MonoBehaviour
         renderer.material = emptyMaterial;
     }
 
-    public void InitializeCell(int x, int y, GameManager manager)
+    public void InitializeCell(int x, int z, GameManager manager)
     {
+        this.x = x;
+        this.z = z;
         gameManager = manager;
-        position = new Vector2(x, y);
     }
 
     private void OnMouseDown()
     {
         if (Player == -1)
         {
-            Debug.Log("Clickable");
+            gameManager.ProcessMove(x, z);
         }
     }
 
     private void OnMouseEnter()
     {
-        if (renderer.material != emptyMaterial)
+        if (renderer.material == emptyMaterial)
         {
             renderer.material = mouseOverMaterial;
         }
@@ -50,10 +52,25 @@ public class Slot : MonoBehaviour
 
     private void OnMouseExit()
     {
-        if (renderer.material != mouseOverMaterial)
+        if (renderer.material == mouseOverMaterial)
         {
             renderer.material = emptyMaterial;
         }
         
+    }
+
+    public void SetCellMaterial(int currentPlayer)
+    {
+        if (renderer.material != player1Material || renderer.material != player2Material)
+        {
+            if (currentPlayer == 1)
+            {
+                renderer.material = player1Material;
+            }
+            else if (currentPlayer == 2)
+            {
+                renderer.material = player2Material;
+            }
+        }
     }
 }

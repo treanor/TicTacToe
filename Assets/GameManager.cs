@@ -2,23 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum PlayerMarkers
-{
-    None,
-    Player1,
-    Player2
-}
 
 public class GameManager : MonoBehaviour
 {
     [SerializeField]
-    private GameObject slotPrefab;
+    private GameObject cellPrefab;
     [SerializeField]
     private int gridSize;
-    [SerializeField]
-    private Vector2[] grid;
 
-    private Dictionary<Vector2, PlayerMarkers> myDictionary;
+    private GameObject[,] grid;
+    private int currentPlayer = 0;
+    private int[,] board;
 
     private static GameManager instance;
     public static GameManager Instance
@@ -49,28 +43,83 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        myDictionary = new Dictionary<Vector2, PlayerMarkers>();
+        InitializeGrid();
+        ResetGame();
+    }
 
-        Vector2 key1 = new Vector2(1, 1);
-        myDictionary.Add(key1, PlayerMarkers.None);
+    private void InitializeGrid()
+    {
+        grid = new GameObject[gridSize, gridSize];
+        board = new int[gridSize, gridSize];
 
-        Vector2 key2 = new Vector2(2, 2);
-        myDictionary.Add(key2, PlayerMarkers.Player1);
-
-        Vector2 key3 = new Vector2(3, 3);
-        myDictionary.Add(key3, PlayerMarkers.Player2);
-
-        /*        PlayerMarkers value = myDictionary[key2];
-                Debug.Log("Value for key2: " + value);*/
-
-        foreach (var item in myDictionary.Keys)
+        for (int x = 0; x < gridSize; x++)
         {
-            Debug.Log(item);
-            PlayerMarkers value;
-            myDictionary.TryGetValue(item, out value);
-        }
-        
+            for (int z = 0; z < gridSize; z++)
+            {
+                Vector3 cellPosition = new Vector3(x, 0, z);
+                GameObject cell = Instantiate(cellPrefab, cellPosition, Quaternion.identity);
+                grid[x, z] = cell;
 
-        Instantiate(slotPrefab);
+                Cell cellScript = cell.GetComponent<Cell>();
+                cellScript.InitializeCell(x, z, this);
+            }
+        }
+    }
+
+    private void ResetGame()
+    {
+        currentPlayer = 1;
+
+        for (int x = 0; x < gridSize; x++)
+        {
+            for (int z = 0; z < gridSize; z++)
+            {
+                board[x, z] = 0;
+            }
+        }
+    }
+
+    public void ProcessMove(int x, int z)
+    {
+        if (board[x, z] != 0)
+        {
+            return;
+        }
+
+        board[x, z] = currentPlayer;
+        GameObject cell = grid[x, z];
+        cell.GetComponent<Cell>().SetCellMaterial(currentPlayer);
+
+        if (CheckWinCondition(currentPlayer))
+        {
+            Debug.Log("Player " + currentPlayer + " wins!");
+            // TODO Implement the win condition logic here
+        }
+        else if (CheckTieCondition())
+        {
+            Debug.Log("It's a tie!");
+            // TODO Implement the tie condition logic here
+        }
+        else
+        {
+            currentPlayer = currentPlayer == 1 ? 2 : 1;
+        }
+    }
+
+    private bool CheckWinCondition(int player)
+    {
+        // TODO
+        // Implement the win condition logic here
+        // Check for horizontal, vertical, and diagonal lines, use sum of vector = grid - 1 to get forward diag, and vector parts == to eachother to get the back diag
+        // Return true if the player wins, otherwise return false
+        return false;
+    }
+
+    private bool CheckTieCondition()
+    {
+        // TODO
+        // Implement the tie condition logic here
+        // Return true if it's a tie, otherwise return false
+        return false;
     }
 }
