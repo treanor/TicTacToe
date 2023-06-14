@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 
@@ -42,7 +40,7 @@ public class GameManager : MonoBehaviour
 
         DontDestroyOnLoad(gameObject);
     }
-
+    
     private void Start()
     {
         InitializeGrid();
@@ -68,8 +66,9 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void ResetGame()
+    public void ResetGame()
     {
+        gameOverMenu.SetActive(false);
         currentPlayer = 1;
 
         for (int x = 0; x < gridSize; x++)
@@ -184,14 +183,5 @@ public class GameManager : MonoBehaviour
             }
         }
         return true;
-    }
-
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            ResetGame();
-        }
-        
     }
 }
