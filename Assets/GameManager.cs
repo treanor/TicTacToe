@@ -9,6 +9,8 @@ public class GameManager : MonoBehaviour
     private GameObject cellPrefab;
     [SerializeField]
     private int gridSize;
+    [SerializeField]
+    private GameObject gameOverMenu;
 
     private GameObject[,] grid;
     private int currentPlayer = 0;
@@ -45,7 +47,7 @@ public class GameManager : MonoBehaviour
     {
         InitializeGrid();
         ResetGame();
-    }
+}
 
     private void InitializeGrid()
     {
@@ -95,15 +97,11 @@ public class GameManager : MonoBehaviour
 
         if (CheckWinCondition(currentPlayer))
         {
-            Debug.Log("Player " + currentPlayer + " wins!");
-            // TODO Implement the win condition logic here
-            ResetGame();
+            gameOverMenu.SetActive(true);
         }
         else if (CheckTieCondition())
         {
-            Debug.Log("It's a tie!");
-            // TODO Implement the tie condition logic here
-            ResetGame();
+            gameOverMenu.SetActive(true);
         }
         else
         {
@@ -113,7 +111,6 @@ public class GameManager : MonoBehaviour
 
     public bool CheckWinCondition(int player)
     {
-        // Check rows
         for (int i = 0; i < gridSize; i++)
         {
             bool hasWon = true;
@@ -132,7 +129,6 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        // Check columns
         for (int j = 0; j < gridSize; j++)
         {
             bool hasWon = true;
@@ -151,7 +147,6 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        // Check diagonals
         bool diagonal1 = true;
         bool diagonal2 = true;
 
@@ -172,8 +167,6 @@ public class GameManager : MonoBehaviour
         {
             return true;
         }
-
-        // No winning condition found
         return false;
     }
 
@@ -186,13 +179,10 @@ public class GameManager : MonoBehaviour
             {
                 if (board[x, y] == 0)
                 {
-                    // If any empty cell is found, the game is not a tie
                     return false;
                 }
             }
         }
-
-        // If all cells are filled and no win condition is met, it's a tie
         return true;
     }
 
