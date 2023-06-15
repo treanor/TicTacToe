@@ -11,12 +11,16 @@ public class Cell : MonoBehaviour
     private Material player1Material;
     [SerializeField]
     private Material player2Material;
+    [SerializeField]
+    public AudioClip[] soundCollection;
 
     private int x;
     private int z;
     private GameManager gameManager;
     private new Renderer renderer;
     private int Player = -1;
+    public AudioSource audioSource;
+    
 
 
     void Start()
@@ -42,6 +46,8 @@ public class Cell : MonoBehaviour
     {
         if (Player == -1)
         {
+            int randomIndex = Random.Range(0, soundCollection.Length);
+            audioSource.PlayOneShot(soundCollection[randomIndex]);
             gameManager.ProcessMove(x, z);
         }
     }
