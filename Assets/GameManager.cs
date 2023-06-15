@@ -11,7 +11,7 @@ public class GameManager : MonoBehaviour
     private GameObject gameOverMenu;
 
     private GameObject[,] grid;
-    private int currentPlayer = 0;
+    public int currentPlayer = 0;
     private int[,] board;
 
     private static GameManager instance;
